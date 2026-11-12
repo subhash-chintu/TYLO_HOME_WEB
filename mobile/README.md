@@ -1,22 +1,23 @@
-# TYLO HOME mobile starter
+# TYLO HOME mobile app
 
-A minimal Expo and React Native placeholder app for iOS and Android. It currently has a Home screen with an empty catalog state, plus Categories and Help / Contact tabs. It uses the same black, white, and gold brand palette. The supplied logo is used as a local image asset. Product data and shopping links are not connected yet.
+Cross-platform Expo and React Native app starter for iOS and Android. It includes a searchable product catalog, category browsing, product details, marketplace search links, WhatsApp enquiry actions, and a Help screen. The UI follows the TYLO HOME black, white, and gold palette and uses the supplied logo.
 
-## Run locally
+## Start the app
 
-1. Install Node.js (LTS) and npm.
-2. From this folder, install dependencies:
+Requirements: Node.js LTS and npm. Install dependencies and start Expo from this folder:
 
-   ```sh
-   npm install
-   ```
+```sh
+npm install
+npx expo start
+```
 
-3. Start Expo:
+Install an Expo Go version compatible with the Expo SDK in `package.json` on a physical phone, then scan the QR code. A simulator is optional. Local iOS simulator builds require macOS and Xcode; cloud builds can be made with Expo Application Services (EAS).
 
-   ```sh
-   npm start
-   ```
+## Add real store details
 
-4. Open the project in Expo Go on a device, or use the terminal shortcuts `npm run android` / `npm run ios` with the relevant simulator or development environment set up.
+- Replace the sample products in `src/data/products.js` with your actual products, descriptions, and specifications.
+- Add exact `amazonUrl` and `flipkartUrl` values to a product when you have its listing. If omitted, the app opens a marketplace search for that product name.
+- Replace `91XXXXXXXXXX` in `src/config.js` with your WhatsApp Business number: country code plus digits only, with no plus sign or spaces.
+- Add real product photos before release. The current catalog uses simple symbols as image placeholders.
 
-The same React Native app project can target both iOS and Android. iOS simulator builds require macOS; Expo Go on a physical device is suitable for an initial preview.
+The catalog is static and needs no backend for this first release.
