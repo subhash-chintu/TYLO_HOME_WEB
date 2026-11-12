@@ -4,7 +4,7 @@ Cross-platform Expo and React Native app starter for iOS and Android. It include
 
 ## Start the app
 
-Requirements: Node.js LTS and npm. Install dependencies and start Expo from this folder:
+Requirements: Node.js 22.13 or newer and npm (required by the current Expo SDK 58). Install dependencies and start Expo from this folder:
 
 ```sh
 npm install

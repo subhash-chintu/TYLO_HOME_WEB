@@ -6,7 +6,7 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  StatusBar,
+
   StyleSheet,
   Text,
   TextInput,
@@ -430,7 +430,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.background} />
+
       <ExpoStatusBar style="light" />
       <View style={styles.app}>
         <ScrollView
