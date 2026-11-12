@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: tylo-home
+    runtime: static
+    buildCommand: mkdir -p dist && cp index.html Logo.jpeg dist/
+    staticPublishPath: dist

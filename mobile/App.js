@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   sectionTitle: { color: '#f5f5f5', fontSize: 23, fontWeight: '600', marginBottom: 9 },
   emptyCopy: { color: '#b4ada0', fontSize: 14, lineHeight: 21 },
   tabBar: { flexDirection: 'row', borderTopWidth: 1, borderTopColor: '#4a3b20', paddingTop: 13, paddingBottom: 10 },
-  tab: { flex: 1, alignItems: 'center', minHeight: 34 },
+  tab: { flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 48 },
   tabText: { color: '#a79d8a', fontSize: 12 },
   activeTabText: { color: '#f1cc69' },
   activeMark: { width: 16, height: 2, backgroundColor: '#d6a638', marginTop: 8, borderRadius: 2 },
