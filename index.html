@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#101010" />
+  <meta name="description" content="Thoughtful kitchen and home essentials. Browse products, compare marketplace options, or request a custom order." />
+  <title>Form & Foundry — Home essentials</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101010; --panel:#171717; --line:#303030; --muted:#a3a3a3; --paper:#f4f3ef; --ink:#111; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--bg); color:#f5f5f4; font:15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    button, input { font:inherit; }
+    .wrap { width:min(1160px, calc(100% - 40px)); margin:auto; }
+    header { position:sticky; top:0; z-index:5; background:rgba(16,16,16,.93); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    .topbar { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { display:flex; align-items:center; gap:11px; font-size:15px; font-weight:650; letter-spacing:.01em; }
+    .brand-mark { width:30px; height:30px; border:1px solid #777; border-radius:8px; display:grid; place-items:center; font-size:13px; }
+    nav { display:flex; gap:26px; color:#c4c4c4; font-size:13px; }
+    nav a:hover, .text-link:hover { color:white; }
+    .top-cta { border:1px solid #555; padding:9px 14px; border-radius:8px; font-size:13px; }
+    .hero { padding:82px 0 60px; border-bottom:1px solid var(--line); }
+    .eyebrow { color:#aaa; text-transform:uppercase; letter-spacing:.14em; font-size:10px; font-weight:650; }
+    h1 { max-width:740px; margin:17px 0 16px; font-size:clamp(42px,7vw,76px); line-height:1.02; letter-spacing:-.065em; font-weight:560; }
+    .hero p { max-width:570px; color:#aaa; font-size:16px; margin:0; }
+    .hero-actions { margin-top:28px; display:flex; flex-wrap:wrap; gap:10px; }
+    .button { display:inline-flex; justify-content:center; align-items:center; min-height:43px; padding:0 16px; border-radius:8px; border:1px solid #555; color:#f5f5f4; font-size:13px; cursor:pointer; transition:.18s ease; }
+    .button:hover { border-color:#aaa; transform:translateY(-1px); }
+    .button.primary { background:var(--paper); color:var(--ink); border-color:var(--paper); }
+    .section { padding:58px 0; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:18px; margin-bottom:23px; }
+    h2 { font-size:27px; letter-spacing:-.04em; font-weight:550; margin:0; }
+    .section-head p { margin:5px 0 0; color:var(--muted); font-size:13px; }
+    .catalog-tools { display:flex; align-items:center; gap:12px; margin-bottom:21px; flex-wrap:wrap; }
+    .search { flex:1 1 220px; min-width:190px; height:42px; color:#eee; background:#171717; border:1px solid var(--line); border-radius:8px; padding:0 13px; outline:none; }
+    .search:focus { border-color:#888; }
+    .filters { display:flex; gap:7px; overflow:auto; padding:2px 0; }
+    .filter { white-space:nowrap; color:#b9b9b9; border:1px solid var(--line); border-radius:7px; background:transparent; padding:8px 12px; cursor:pointer; font-size:12px; }
+    .filter.active, .filter:hover { color:#111; background:var(--paper); border-color:var(--paper); }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
+    .card { overflow:hidden; border:1px solid var(--line); background:var(--panel); border-radius:11px; transition:border-color .2s, transform .2s; }
+    .card:hover { border-color:#626262; transform:translateY(-2px); }
+    .product-art { height:190px; display:grid; place-items:center; position:relative; overflow:hidden; background:radial-gradient(ellipse at 50% 70%,#444 0,#242424 38%,#1b1b1b 75%); }
+    .product-art:before { content:""; width:170px; height:170px; border-radius:50%; position:absolute; border:1px solid rgba(255,255,255,.09); }
+    .product-art span { position:relative; font-size:72px; filter:grayscale(1); opacity:.86; }
+    .tag { position:absolute; left:13px; top:13px; z-index:1; border:1px solid #555; color:#ddd; background:#151515; border-radius:5px; padding:4px 8px; font-size:10px; }
+    .card-body { padding:16px; }
+    .card-meta { display:flex; justify-content:space-between; align-items:center; color:#999; font-size:11px; }
+    .card h3 { margin:9px 0 5px; font-size:17px; font-weight:550; letter-spacing:-.025em; }
+    .card p { min-height:42px; margin:0; color:#aaa; font-size:12px; }
+    .price { margin-top:12px; font-size:13px; color:#eee; }
+    .card-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:14px; }
+    .card-actions .button { min-height:37px; padding:0 8px; font-size:11px; }
+    .card-actions .custom { grid-column:1/-1; }
+    .empty { grid-column:1/-1; padding:45px 10px; text-align:center; color:var(--muted); border:1px dashed var(--line); border-radius:10px; }
+    .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+    .info-card { border:1px solid var(--line); border-radius:11px; padding:24px; background:var(--panel); }
+    .info-card .icon { font-size:19px; }
+    .info-card h3 { font-size:17px; font-weight:550; margin:14px 0 6px; }
+    .info-card p { color:#aaa; margin:0 0 16px; font-size:13px; max-width:460px; }
+    .text-link { color:#eee; font-size:13px; text-decoration:underline; text-decoration-color:#555; text-underline-offset:4px; }
+    .faq { border-top:1px solid var(--line); margin-top:17px; }
+    details { border-bottom:1px solid var(--line); padding:13px 0; }
+    summary { cursor:pointer; font-size:13px; }
+    details p { color:#aaa; font-size:12px; margin:10px 0 0; }
+    footer { border-top:1px solid var(--line); padding:24px 0 32px; color:#888; font-size:11px; }
+    .footer-row { display:flex; justify-content:space-between; gap:15px; }
+    @media(max-width:760px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .product-art { height:160px; } nav { gap:15px; } }
+    @media(max-width:540px) { .wrap { width:min(100% - 28px,1160px); } .topbar { min-height:62px; } nav { display:none; } .top-cta { padding:8px 10px; } .hero { padding:62px 0 45px; } .hero p { font-size:14px; } .section { padding:43px 0; } .grid { gap:9px; } .product-art { height:135px; } .product-art span { font-size:57px; } .card-body { padding:12px; } .card h3 { font-size:15px; } .card p { font-size:11px; min-height:48px; } .card-actions { grid-template-columns:1fr; } .card-actions .custom { grid-column:auto; } .card-actions .button { min-height:35px; } .info-grid { grid-template-columns:1fr; } .section-head { align-items:start; flex-direction:column; } .footer-row { flex-direction:column; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap topbar">
+      <a class="brand" href="#home" aria-label="Form and Foundry home"><span class="brand-mark">F.</span><span>Form &amp; Foundry</span></a>
+      <nav aria-label="Main navigation"><a href="#products">Products</a><a href="#categories">Categories</a><a href="#contact">Contact &amp; help</a></nav>
+      <a class="top-cta" href="#products">Explore products <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main>
+    <section class="hero" id="home"><div class="wrap">
+      <div class="eyebrow">Kitchen · Bath · Surfaces</div>
+      <h1>Thoughtful essentials<br />for the spaces you live in.</h1>
+      <p>Explore taps, sinks, basins, tiles, granite and made-to-order pieces. Compare marketplace options or talk with us about a custom fit.</p>
+      <div class="hero-actions"><a class="button primary" href="#products">Browse the collection <span aria-hidden="true">&nbsp;↓</span></a><a class="button" href="#contact">Ask us a question</a></div>
+    </div></section>
+    <section class="section" id="products"><div class="wrap">
+      <div class="section-head" id="categories"><div><div class="eyebrow">The collection</div><h2>Products for every corner</h2><p>Browse by category or search the collection.</p></div><span id="count" class="eyebrow" aria-live="polite"></span></div>
+      <div class="catalog-tools"><input class="search" id="search" type="search" placeholder="Search products…" aria-label="Search products" /><div class="filters" id="filters" aria-label="Filter products by category"></div></div>
+      <div class="grid" id="product-grid"></div>
+    </div></section>
+    <section class="section" id="contact"><div class="wrap">
+      <div class="section-head"><div><div class="eyebrow">Here to help</div><h2>Need a hand choosing?</h2><p>Tell us what you’re working on. We’ll help you find the right fit.</p></div></div>
+      <div class="info-grid">
+        <article class="info-card"><div class="icon" aria-hidden="true">↗</div><h3>Custom orders</h3><p>Have a size, finish, or design in mind? Message us on WhatsApp Business and share your requirements.</p><a class="text-link whatsapp-contact" href="#">Start a WhatsApp conversation</a></article>
+        <article class="info-card"><div class="icon" aria-hidden="true">?</div><h3>Contact &amp; help</h3><p>Ask about product details, availability, delivery, or marketplace listings. We’ll get back to you.</p><a class="text-link whatsapp-contact" href="#">Chat with our team</a></article>
+      </div>
+      <div class="faq"><details><summary>How do I place a custom order?</summary><p>Tap “Custom order” on any product and send us the details through WhatsApp. We’ll confirm specifications, price, and next steps.</p></details><details><summary>Where can I buy a listed product?</summary><p>Use the Amazon or Flipkart buttons on a product card to search for that item on the marketplace. Listings and availability are managed by those marketplaces.</p></details><details><summary>Can products be made in a different size or finish?</summary><p>Some products may allow customization. Message us with the product name, measurements, and preferred finish so we can confirm.</p></details></div>
+    </div></section>
+  </main>
+  <footer><div class="wrap footer-row"><span>© <span id="year"></span> Form &amp; Foundry. Home, made considered.</span><span>Product images and prices can be added before launch.</span></div></footer>
+  <script>
+    // SETUP: Replace with your WhatsApp Business number in international format (digits only, no + or spaces).
+    const WHATSAPP_NUMBER = "91XXXXXXXXXX";
+    // Edit these sample products, categories and prices to match your catalog.
+    const products = [
+      { name:"Arc Pull-Down Tap", category:"Taps", price:"Ask for price", icon:"🚰", note:"Brushed finish · Kitchen", tag:"Popular" },
+      { name:"Undermount Kitchen Sink", category:"Sinks", price:"Ask for price", icon:"▱", note:"Deep bowl · Stainless steel", tag:"Kitchen" },
+      { name:"Stone Counter Basin", category:"Basins", price:"Ask for price", icon:"◒", note:"Natural stone · Made to order", tag:"Custom" },
+      { name:"Textured Wall Tile", category:"Tiles", price:"Ask for price", icon:"▦", note:"Matte finish · Multiple sizes", tag:"Surfaces" },
+      { name:"Black Granite Slab", category:"Granite", price:"Ask for price", icon:"⬛", note:"Natural stone · Custom cut", tag:"Surfaces" },
+      { name:"Made-to-Measure Vanity", category:"Custom", price:"Ask for price", icon:"▤", note:"Designed around your space", tag:"Made to order" }
+    ];
+    let activeCategory = "All";
+    const grid = document.getElementById("product-grid");
+    const filters = document.getElementById("filters");
+    const search = document.getElementById("search");
+    function waLink(message) { return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`; }
+    function renderFilters() {
+      const categories = ["All", ...new Set(products.map(p => p.category))];
+      filters.innerHTML = categories.map(category => `<button class="filter ${category === activeCategory ? "active" : ""}" type="button" aria-pressed="${category === activeCategory}" data-category="${category}">${category}</button>`).join("");
+      filters.querySelectorAll("button").forEach(button => button.addEventListener("click", () => { activeCategory = button.dataset.category; renderFilters(); renderProducts(); }));
+    }
+    function renderProducts() {
+      const query = search.value.trim().toLowerCase();
+      const shown = products.filter(p => (activeCategory === "All" || p.category === activeCategory) && `${p.name} ${p.category} ${p.note}`.toLowerCase().includes(query));
+      document.getElementById("count").textContent = `${shown.length} ${shown.length === 1 ? "ITEM" : "ITEMS"}`;
+      grid.innerHTML = shown.length ? shown.map(p => {
+        const message = `Hi, I'm interested in ${p.name}. Please share details about price, availability, and customization.`;
+        const marketplaceQuery = encodeURIComponent(p.name);
+        return `<article class="card"><div class="product-art"><span class="tag">${p.tag}</span><span aria-hidden="true">${p.icon}</span></div><div class="card-body"><div class="card-meta"><span>${p.category}</span><span>Home essentials</span></div><h3>${p.name}</h3><p>${p.note}</p><div class="price">${p.price}</div><div class="card-actions"><a class="button" href="https://www.amazon.in/s?k=${marketplaceQuery}" target="_blank" rel="noopener noreferrer">View on Amazon ↗</a><a class="button" href="https://www.flipkart.com/search?q=${marketplaceQuery}" target="_blank" rel="noopener noreferrer">View on Flipkart ↗</a><a class="button primary custom" href="${waLink(message)}" target="_blank" rel="noopener noreferrer">Custom order on WhatsApp</a></div></div></article>`;
+      }).join("") : `<div class="empty">No products match that search. Try another term or category.</div>`;
+    }
+    search.addEventListener("input", renderProducts);
+    document.querySelectorAll(".whatsapp-contact").forEach(link => { link.href = waLink("Hi, I have a question about your kitchen and home products."); link.target = "_blank"; link.rel = "noopener noreferrer"; });
+    document.getElementById("year").textContent = new Date().getFullYear();
+    renderFilters(); renderProducts();
+  </script>
+</body>
+</html>
