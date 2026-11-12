@@ -3,26 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#101010" />
-  <meta name="description" content="Thoughtful kitchen and home essentials. Browse products, compare marketplace options, or request a custom order." />
-  <title>Form & Foundry — Home essentials</title>
+  <meta name="theme-color" content="#090909" />
+  <meta name="description" content="TYLO HOME — adhesive, sanitary and fitting essentials for your home. Browse products, compare marketplace options, or request a custom order." />
+  <title>TYLO HOME — Adhesive · Sanitary · Fittings</title>
   <style>
-    :root { color-scheme: dark; --bg:#101010; --panel:#171717; --line:#303030; --muted:#a3a3a3; --paper:#f4f3ef; --ink:#111; }
+    :root { color-scheme: dark; --bg:#090909; --panel:#15130f; --line:#383126; --muted:#b4ada0; --paper:#f1cc69; --ink:#14110a; --gold:#d6a638; --gold-light:#f3da87; }
     * { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body { margin:0; background:var(--bg); color:#f5f5f4; font:15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     a { color:inherit; text-decoration:none; }
     button, input { font:inherit; }
     .wrap { width:min(1160px, calc(100% - 40px)); margin:auto; }
-    header { position:sticky; top:0; z-index:5; background:rgba(16,16,16,.93); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    header { position:sticky; top:0; z-index:5; background:rgba(9,9,9,.94); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
     .topbar { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
     .brand { display:flex; align-items:center; gap:11px; font-size:15px; font-weight:650; letter-spacing:.01em; }
-    .brand-mark { width:30px; height:30px; border:1px solid #777; border-radius:8px; display:grid; place-items:center; font-size:13px; }
+    .brand-mark { width:30px; height:30px; border:1px solid var(--gold); color:var(--gold-light); border-radius:8px; display:grid; place-items:center; font-size:13px; font-weight:700; }
     nav { display:flex; gap:26px; color:#c4c4c4; font-size:13px; }
-    nav a:hover, .text-link:hover { color:white; }
-    .top-cta { border:1px solid #555; padding:9px 14px; border-radius:8px; font-size:13px; }
-    .hero { padding:82px 0 60px; border-bottom:1px solid var(--line); }
-    .eyebrow { color:#aaa; text-transform:uppercase; letter-spacing:.14em; font-size:10px; font-weight:650; }
+    nav a:hover, .text-link:hover { color:var(--gold-light); }
+    .top-cta { border:1px solid #755c2d; padding:9px 14px; border-radius:8px; font-size:13px; } .top-cta:hover { border-color:var(--gold); color:var(--gold-light); }
+    .hero { padding:66px 0 58px; border-bottom:1px solid var(--line); }
+    .hero-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(230px,370px); align-items:center; gap:36px; }
+    .hero-logo { width:100%; max-width:370px; justify-self:end; display:block; border-radius:5px; }
+    .eyebrow { color:var(--gold-light); text-transform:uppercase; letter-spacing:.14em; font-size:10px; font-weight:650; }
     h1 { max-width:740px; margin:17px 0 16px; font-size:clamp(42px,7vw,76px); line-height:1.02; letter-spacing:-.065em; font-weight:560; }
     .hero p { max-width:570px; color:#aaa; font-size:16px; margin:0; }
     .hero-actions { margin-top:28px; display:flex; flex-wrap:wrap; gap:10px; }
@@ -41,11 +43,11 @@
     .filter.active, .filter:hover { color:#111; background:var(--paper); border-color:var(--paper); }
     .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
     .card { overflow:hidden; border:1px solid var(--line); background:var(--panel); border-radius:11px; transition:border-color .2s, transform .2s; }
-    .card:hover { border-color:#626262; transform:translateY(-2px); }
-    .product-art { height:190px; display:grid; place-items:center; position:relative; overflow:hidden; background:radial-gradient(ellipse at 50% 70%,#444 0,#242424 38%,#1b1b1b 75%); }
+    .card:hover { border-color:#8b6b2b; transform:translateY(-2px); }
+    .product-art { height:190px; display:grid; place-items:center; position:relative; overflow:hidden; background:radial-gradient(ellipse at 50% 70%,#41351f 0,#242018 38%,#1b1915 75%); }
     .product-art:before { content:""; width:170px; height:170px; border-radius:50%; position:absolute; border:1px solid rgba(255,255,255,.09); }
     .product-art span { position:relative; font-size:72px; filter:grayscale(1); opacity:.86; }
-    .tag { position:absolute; left:13px; top:13px; z-index:1; border:1px solid #555; color:#ddd; background:#151515; border-radius:5px; padding:4px 8px; font-size:10px; }
+    .tag { position:absolute; left:13px; top:13px; z-index:1; border:1px solid #6f5625; color:var(--gold-light); background:#15130f; border-radius:5px; padding:4px 8px; font-size:10px; }
     .card-body { padding:16px; }
     .card-meta { display:flex; justify-content:space-between; align-items:center; color:#999; font-size:11px; }
     .card h3 { margin:9px 0 5px; font-size:17px; font-weight:550; letter-spacing:-.025em; }
@@ -60,32 +62,35 @@
     .info-card .icon { font-size:19px; }
     .info-card h3 { font-size:17px; font-weight:550; margin:14px 0 6px; }
     .info-card p { color:#aaa; margin:0 0 16px; font-size:13px; max-width:460px; }
-    .text-link { color:#eee; font-size:13px; text-decoration:underline; text-decoration-color:#555; text-underline-offset:4px; }
+    .text-link { color:#eee; font-size:13px; text-decoration:underline; text-decoration-color:#8b6b2b; text-underline-offset:4px; }
     .faq { border-top:1px solid var(--line); margin-top:17px; }
     details { border-bottom:1px solid var(--line); padding:13px 0; }
     summary { cursor:pointer; font-size:13px; }
     details p { color:#aaa; font-size:12px; margin:10px 0 0; }
     footer { border-top:1px solid var(--line); padding:24px 0 32px; color:#888; font-size:11px; }
     .footer-row { display:flex; justify-content:space-between; gap:15px; }
-    @media(max-width:760px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .product-art { height:160px; } nav { gap:15px; } }
-    @media(max-width:540px) { .wrap { width:min(100% - 28px,1160px); } .topbar { min-height:62px; } nav { display:none; } .top-cta { padding:8px 10px; } .hero { padding:62px 0 45px; } .hero p { font-size:14px; } .section { padding:43px 0; } .grid { gap:9px; } .product-art { height:135px; } .product-art span { font-size:57px; } .card-body { padding:12px; } .card h3 { font-size:15px; } .card p { font-size:11px; min-height:48px; } .card-actions { grid-template-columns:1fr; } .card-actions .custom { grid-column:auto; } .card-actions .button { min-height:35px; } .info-grid { grid-template-columns:1fr; } .section-head { align-items:start; flex-direction:column; } .footer-row { flex-direction:column; } }
+    @media(max-width:760px) { .hero-layout { grid-template-columns:1fr minmax(190px,250px); gap:18px; } .grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .product-art { height:160px; } nav { gap:15px; } }
+    @media(max-width:540px) { .wrap { width:min(100% - 28px,1160px); } .topbar { min-height:62px; } nav { display:none; } .top-cta { padding:8px 10px; } .hero { padding:45px 0 40px; } .hero-layout { grid-template-columns:1fr; gap:25px; } .hero-logo { width:min(100%,230px); justify-self:start; } .hero p { font-size:14px; } .section { padding:43px 0; } .grid { gap:9px; } .product-art { height:135px; } .product-art span { font-size:57px; } .card-body { padding:12px; } .card h3 { font-size:15px; } .card p { font-size:11px; min-height:48px; } .card-actions { grid-template-columns:1fr; } .card-actions .custom { grid-column:auto; } .card-actions .button { min-height:35px; } .info-grid { grid-template-columns:1fr; } .section-head { align-items:start; flex-direction:column; } .footer-row { flex-direction:column; } }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; } }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap topbar">
-      <a class="brand" href="#home" aria-label="Form and Foundry home"><span class="brand-mark">F.</span><span>Form &amp; Foundry</span></a>
+      <a class="brand" href="#home" aria-label="TYLO HOME"><span class="brand-mark">T</span><span>TYLO <span style="color:var(--gold-light)">HOME</span></span></a>
       <nav aria-label="Main navigation"><a href="#products">Products</a><a href="#categories">Categories</a><a href="#contact">Contact &amp; help</a></nav>
       <a class="top-cta" href="#products">Explore products <span aria-hidden="true">↗</span></a>
     </div>
   </header>
   <main>
-    <section class="hero" id="home"><div class="wrap">
-      <div class="eyebrow">Kitchen · Bath · Surfaces</div>
-      <h1>Thoughtful essentials<br />for the spaces you live in.</h1>
-      <p>Explore taps, sinks, basins, tiles, granite and made-to-order pieces. Compare marketplace options or talk with us about a custom fit.</p>
-      <div class="hero-actions"><a class="button primary" href="#products">Browse the collection <span aria-hidden="true">&nbsp;↓</span></a><a class="button" href="#contact">Ask us a question</a></div>
+    <section class="hero" id="home"><div class="wrap hero-layout">
+      <div>
+        <div class="eyebrow">Adhesive · Sanitary · Fittings</div>
+        <h1>Finishing touches<br />for a better home.</h1>
+        <p>Explore taps, sinks, basins, tiles, granite and made-to-order pieces. Compare marketplace options or talk with TYLO HOME about a custom fit.</p>
+        <div class="hero-actions"><a class="button primary" href="#products">Browse products <span aria-hidden="true">&nbsp;↓</span></a><a class="button" href="#contact">Ask us a question</a></div>
+      </div>
+      <img class="hero-logo" src="Logo.jpeg" alt="TYLO HOME — Adhesive, Sanitary, Fittings" width="370" height="370" />
     </div></section>
     <section class="section" id="products"><div class="wrap">
       <div class="section-head" id="categories"><div><div class="eyebrow">The collection</div><h2>Products for every corner</h2><p>Browse by category or search the collection.</p></div><span id="count" class="eyebrow" aria-live="polite"></span></div>
@@ -101,7 +106,7 @@
       <div class="faq"><details><summary>How do I place a custom order?</summary><p>Tap “Custom order” on any product and send us the details through WhatsApp. We’ll confirm specifications, price, and next steps.</p></details><details><summary>Where can I buy a listed product?</summary><p>Use the Amazon or Flipkart buttons on a product card to search for that item on the marketplace. Listings and availability are managed by those marketplaces.</p></details><details><summary>Can products be made in a different size or finish?</summary><p>Some products may allow customization. Message us with the product name, measurements, and preferred finish so we can confirm.</p></details></div>
     </div></section>
   </main>
-  <footer><div class="wrap footer-row"><span>© <span id="year"></span> Form &amp; Foundry. Home, made considered.</span><span>Product images and prices can be added before launch.</span></div></footer>
+  <footer><div class="wrap footer-row"><span>© <span id="year"></span> TYLO HOME. Adhesive · Sanitary · Fittings.</span><span>Product images and prices can be added before launch.</span></div></footer>
   <script>
     // SETUP: Replace with your WhatsApp Business number in international format (digits only, no + or spaces).
     const WHATSAPP_NUMBER = "91XXXXXXXXXX";

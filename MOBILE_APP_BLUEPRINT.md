@@ -2,7 +2,7 @@
 
 ## Product direction
 
-Build one iOS and Android app for the home and kitchen product catalog. Keep the visual system consistent with the static storefront: near-black surfaces, white text, restrained gray dividers, simple typography, and generous spacing. This is a catalog and enquiry app; purchases happen through Amazon, Flipkart, or WhatsApp Business.
+Build one iOS and Android app for the home and kitchen product catalog. Keep the visual system consistent with the static storefront: near-black surfaces, white text, gold accents sampled from the TYLO HOME logo, simple typography, and generous spacing. This is a catalog and enquiry app; purchases happen through Amazon, Flipkart, or WhatsApp Business.
 
 ## Recommended framework: Expo + React Native
 

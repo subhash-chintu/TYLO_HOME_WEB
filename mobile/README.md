@@ -1,6 +1,6 @@
-# Form & Foundry mobile starter
+# TYLO HOME mobile starter
 
-A minimal Expo and React Native placeholder app for iOS and Android. It currently has a Home screen with an empty catalog state, plus Categories and Help / Contact tabs. It uses the same simple black and white storefront direction. Product data and shopping links are not connected yet.
+A minimal Expo and React Native placeholder app for iOS and Android. It currently has a Home screen with an empty catalog state, plus Categories and Help / Contact tabs. It uses the same black, white, and gold brand palette. The supplied logo is used as a local image asset. Product data and shopping links are not connected yet.
 
 ## Run locally
 
