@@ -7,6 +7,14 @@
     "userInterfaceStyle": "dark",
     "plugins": [
       "expo-status-bar"
-    ]
+    ],
+    "android": {
+      "package": "com.tylohome.catalog"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "95d5580b-e598-49a8-a615-c02644598a02"
+      }
+    }
   }
 }

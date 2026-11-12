@@ -21,3 +21,13 @@ Install an Expo Go version compatible with the Expo SDK in `package.json` on a p
 - Add real product photos before release. The current catalog uses simple symbols as image placeholders.
 
 The catalog is static and needs no backend for this first release.
+
+## Build an installable Android APK
+
+This project has an internal EAS profile that creates an APK for direct installation. After signing in to an Expo account, run:
+
+```sh
+npx eas-cli@latest build --platform android --profile preview
+```
+
+The app package ID is currently `com.tylohome.catalog`. Choose the final package ID before publishing to Google Play.
