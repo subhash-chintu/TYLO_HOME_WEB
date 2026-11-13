@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#090909" />
   <meta name="description" content="TYLO HOME — adhesive, sanitary and fitting essentials for your home. Browse products, compare marketplace options, or request a custom order." />
+  <link rel="canonical" href="https://tylo-home.onrender.com/" />
   <title>TYLO HOME — Adhesive · Sanitary · Fittings</title>
   <style>
     :root { color-scheme: dark; --bg:#090909; --panel:#15130f; --line:#383126; --muted:#b4ada0; --paper:#f1cc69; --ink:#14110a; --gold:#d6a638; --gold-light:#f3da87; }
@@ -49,6 +50,7 @@
     .product-art { height:190px; display:grid; place-items:center; position:relative; overflow:hidden; background:radial-gradient(ellipse at 50% 70%,#41351f 0,#242018 38%,#1b1915 75%); }
     .product-art:before { content:""; width:170px; height:170px; border-radius:50%; position:absolute; border:1px solid rgba(255,255,255,.09); }
     .product-art span { position:relative; font-size:72px; filter:grayscale(1); opacity:.86; }
+    .product-photo { width:100%; height:100%; object-fit:cover; }
     .tag { position:absolute; left:13px; top:13px; z-index:1; border:1px solid #6f5625; color:var(--gold-light); background:#15130f; border-radius:5px; padding:4px 8px; font-size:10px; }
     .card-body { padding:16px; }
     .card-meta { display:flex; justify-content:space-between; align-items:center; color:#999; font-size:11px; }
@@ -97,6 +99,7 @@
     <section class="section" id="products"><div class="wrap">
       <div class="section-head" id="categories"><div><div class="eyebrow">The collection</div><h2>Products for every corner</h2><p>Browse by category or search the collection.</p></div><span id="count" class="eyebrow" aria-live="polite"></span></div>
       <div class="catalog-tools"><input class="search" id="search" type="search" placeholder="Search products…" aria-label="Search products" /><div class="filters" id="filters" aria-label="Filter products by category"></div></div>
+      <p id="catalog-status" class="section-head" role="status" aria-live="polite"></p>
       <div class="grid" id="product-grid"></div>
     </div></section>
     <section class="section" id="contact"><div class="wrap">
@@ -105,46 +108,10 @@
         <article class="info-card"><div class="icon" aria-hidden="true">↗</div><h3>Custom orders</h3><p>Have a size, finish, or design in mind? Message us on WhatsApp Business and share your requirements.</p><a class="text-link whatsapp-contact" href="#">Start a WhatsApp conversation</a></article>
         <article class="info-card"><div class="icon" aria-hidden="true">?</div><h3>Contact &amp; help</h3><p>Ask about product details, availability, delivery, or marketplace listings. We’ll get back to you.</p><a class="text-link whatsapp-contact" href="#">Chat with our team</a></article>
       </div>
-      <div class="faq"><details><summary>How do I place a custom order?</summary><p>Tap “Custom order” on any product and send us the details through WhatsApp. We’ll confirm specifications, price, and next steps.</p></details><details><summary>Where can I buy a listed product?</summary><p>Use the Amazon or Flipkart buttons on a product card to search for that item on the marketplace. Listings and availability are managed by those marketplaces.</p></details><details><summary>Can products be made in a different size or finish?</summary><p>Some products may allow customization. Message us with the product name, measurements, and preferred finish so we can confirm.</p></details></div>
+      <div class="faq" id="faq-list"><details><summary>How do I place a custom order?</summary><p>Tap “Custom order” on any product and send us the details through WhatsApp. We’ll confirm specifications, price, and next steps.</p></details><details><summary>Where can I buy a listed product?</summary><p>Use the Amazon or Flipkart buttons on a product card to search for that item on the marketplace. Listings and availability are managed by those marketplaces.</p></details><details><summary>Can products be made in a different size or finish?</summary><p>Some products may allow customization. Message us with the product name, measurements, and preferred finish so we can confirm.</p></details></div>
     </div></section>
   </main>
   <footer><div class="wrap footer-row"><span>© <span id="year"></span> TYLO HOME. Adhesive · Sanitary · Fittings.</span><span>Product images and prices can be added before launch.</span></div></footer>
-  <script>
-    // SETUP: Replace with your WhatsApp Business number in international format (digits only, no + or spaces).
-    const WHATSAPP_NUMBER = "91XXXXXXXXXX";
-    // Edit these sample products, categories and prices to match your catalog.
-    const products = [
-      { name:"Arc Pull-Down Tap", category:"Taps", price:"Ask for price", icon:"🚰", note:"Brushed finish · Kitchen", tag:"Popular" },
-      { name:"Undermount Kitchen Sink", category:"Sinks", price:"Ask for price", icon:"▱", note:"Deep bowl · Stainless steel", tag:"Kitchen" },
-      { name:"Stone Counter Basin", category:"Basins", price:"Ask for price", icon:"◒", note:"Natural stone · Made to order", tag:"Custom" },
-      { name:"Textured Wall Tile", category:"Tiles", price:"Ask for price", icon:"▦", note:"Matte finish · Multiple sizes", tag:"Surfaces" },
-      { name:"Black Granite Slab", category:"Granite", price:"Ask for price", icon:"⬛", note:"Natural stone · Custom cut", tag:"Surfaces" },
-      { name:"Made-to-Measure Vanity", category:"Custom", price:"Ask for price", icon:"▤", note:"Designed around your space", tag:"Made to order" }
-    ];
-    let activeCategory = "All";
-    const grid = document.getElementById("product-grid");
-    const filters = document.getElementById("filters");
-    const search = document.getElementById("search");
-    function waLink(message) { return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`; }
-    function renderFilters() {
-      const categories = ["All", ...new Set(products.map(p => p.category))];
-      filters.innerHTML = categories.map(category => `<button class="filter ${category === activeCategory ? "active" : ""}" type="button" aria-pressed="${category === activeCategory}" data-category="${category}">${category}</button>`).join("");
-      filters.querySelectorAll("button").forEach(button => button.addEventListener("click", () => { activeCategory = button.dataset.category; renderFilters(); renderProducts(); }));
-    }
-    function renderProducts() {
-      const query = search.value.trim().toLowerCase();
-      const shown = products.filter(p => (activeCategory === "All" || p.category === activeCategory) && `${p.name} ${p.category} ${p.note}`.toLowerCase().includes(query));
-      document.getElementById("count").textContent = `${shown.length} ${shown.length === 1 ? "ITEM" : "ITEMS"}`;
-      grid.innerHTML = shown.length ? shown.map(p => {
-        const message = `Hi, I'm interested in ${p.name}. Please share details about price, availability, and customization.`;
-        const marketplaceQuery = encodeURIComponent(p.name);
-        return `<article class="card"><div class="product-art"><span class="tag">${p.tag}</span><span aria-hidden="true">${p.icon}</span></div><div class="card-body"><div class="card-meta"><span>${p.category}</span><span>Home essentials</span></div><h3>${p.name}</h3><p>${p.note}</p><div class="price">${p.price}</div><div class="card-actions"><a class="button" href="https://www.amazon.in/s?k=${marketplaceQuery}" target="_blank" rel="noopener noreferrer">View on Amazon ↗</a><a class="button" href="https://www.flipkart.com/search?q=${marketplaceQuery}" target="_blank" rel="noopener noreferrer">View on Flipkart ↗</a><a class="button primary custom" href="${waLink(message)}" target="_blank" rel="noopener noreferrer">Custom order on WhatsApp</a></div></div></article>`;
-      }).join("") : `<div class="empty">No products match that search. Try another term or category.</div>`;
-    }
-    search.addEventListener("input", renderProducts);
-    document.querySelectorAll(".whatsapp-contact").forEach(link => { link.href = waLink("Hi, I have a question about your kitchen and home products."); link.target = "_blank"; link.rel = "noopener noreferrer"; });
-    document.getElementById("year").textContent = new Date().getFullYear();
-    renderFilters(); renderProducts();
-  </script>
+  <script type="module" src="/src/site.js"></script>
 </body>
 </html>

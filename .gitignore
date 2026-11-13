@@ -3,3 +3,10 @@ mobile/.expo/
 mobile/dist/
 dist/
 mobile/.tmp/
+.worktrees/
+.env
+.env.*
+!.env.example
+mobile/.env
+mobile/.env.*
+!mobile/.env.example

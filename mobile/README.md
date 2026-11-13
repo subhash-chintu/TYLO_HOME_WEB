@@ -13,14 +13,13 @@ npx expo start
 
 Install an Expo Go version compatible with the Expo SDK in `package.json` on a physical phone, then scan the QR code. A simulator is optional. Local iOS simulator builds require macOS and Xcode; cloud builds can be made with Expo Application Services (EAS).
 
-## Add real store details
+## Connect the live catalog
 
-- Replace the sample products in `src/data/products.js` with your actual products, descriptions, and specifications.
-- Add exact `amazonUrl` and `flipkartUrl` values to a product when you have its listing. If omitted, the app opens a marketplace search for that product name.
-- Replace `91XXXXXXXXXX` in `src/config.js` with your WhatsApp Business number: country code plus digits only, with no plus sign or spaces.
-- Add real product photos before release. The current catalog uses simple symbols as image placeholders.
+Copy `.env.example` to `.env` and set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Use the Supabase project API URL and a publishable key. Never put the database password, service-role key, or secret API key in the mobile app.
 
-The catalog is static and needs no backend for this first release.
+The app reads published products, active categories, and store settings from Supabase when configured. It keeps the sample catalog as a fallback if no connection is configured or the catalog is temporarily unavailable. The WhatsApp Business number, FAQs, product details, images, and marketplace links are managed in the web admin page.
+
+For an EAS build, configure the same two `EXPO_PUBLIC_...` variables in the EAS environment used by the selected build profile before building.
 
 ## Build an installable Android APK
 

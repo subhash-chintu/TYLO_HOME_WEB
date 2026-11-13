@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Image,
@@ -14,8 +14,10 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import { categories, getCategory, products } from "./src/data/products";
+import { categories as initialCategories, products as initialProducts } from "./src/data/products";
 import { WHATSAPP_BUSINESS_NUMBER } from "./src/config";
+import { fetchPublicCatalog } from "./src/lib/catalog";
+import { isSupabaseConfigured } from "./src/lib/supabase";
 
 const COLORS = {
   background: "#090909",
@@ -42,12 +44,12 @@ function openExternal(url, label) {
   });
 }
 
-function openWhatsApp(message) {
-  const digits = WHATSAPP_BUSINESS_NUMBER.replace(/\D/g, "");
-  if (!digits || /X/i.test(WHATSAPP_BUSINESS_NUMBER) || digits.length < 10) {
+function openWhatsApp(message, number = WHATSAPP_BUSINESS_NUMBER) {
+  const digits = String(number || "").replace(/\D/g, "");
+  if (!digits || /X/i.test(String(number || "")) || digits.length < 10) {
     Alert.alert(
       "WhatsApp number not set",
-      "Add your WhatsApp Business number in mobile/src/config.js. Use your country code and digits only."
+      "Ask the TYLO HOME admin to add a WhatsApp Business number in the content manager."
     );
     return;
   }
@@ -63,7 +65,11 @@ function marketplaceUrl(product, marketplace) {
     : "https://www.flipkart.com/search?q=" + query;
 }
 
-function BrandHeader({ compact = false }) {
+function getCategory(categoryId, categoryList = initialCategories) {
+  return categoryList.find((category) => category.id === categoryId) || categoryList[0] || { name: "Products", icon: "◈", description: "" };
+}
+
+function BrandHeader({ compact = false, tagline }) {
   return (
     <View style={[styles.brandHeader, compact && styles.brandHeaderCompact]}>
       <Image source={require("./assets/logo.jpeg")} style={styles.logo} resizeMode="contain" />
@@ -72,7 +78,7 @@ function BrandHeader({ compact = false }) {
         <Text style={styles.brandTitle}>
           TYLO <Text style={styles.goldText}>HOME</Text>
         </Text>
-        {!compact && <Text style={styles.brandSubtitle}>Thoughtful details for everyday spaces.</Text>}
+        {!compact && <Text style={styles.brandSubtitle}>{tagline || "Thoughtful details for everyday spaces."}</Text>}
       </View>
     </View>
   );
@@ -126,8 +132,8 @@ function CategoryChip({ category, selected, onPress }) {
   );
 }
 
-function ProductCard({ product, columns, onPress }) {
-  const category = getCategory(product.categoryId);
+function ProductCard({ product, columns, onPress, categories }) {
+  const category = getCategory(product.categoryId, categories);
   return (
     <Pressable
       accessibilityRole="button"
@@ -140,22 +146,22 @@ function ProductCard({ product, columns, onPress }) {
       ]}
     >
       <View style={styles.productArt}>
-        <Text style={styles.productTag}>{product.label}</Text>
-        <Text style={styles.productIcon} accessibilityLabel={category.name + " product"}>
-          {product.icon}
-        </Text>
+        {!!product.label && <Text style={styles.productTag}>{product.label}</Text>}
+        {product.imageUrl
+          ? <Image source={{ uri: product.imageUrl }} style={styles.productPhoto} resizeMode="cover" accessibilityLabel={product.name} />
+          : <Text style={styles.productIcon} accessibilityLabel={category.name + " product"}>{product.icon}</Text>}
       </View>
       <View style={styles.productCardCopy}>
         <Text style={styles.productCategory}>{category.name.toUpperCase()}</Text>
         <Text style={styles.productName} numberOfLines={2}>{product.name}</Text>
-        <Text style={styles.productPrice}>Enquire for price</Text>
+        <Text style={styles.productPrice}>{product.priceText || "Enquire for price"}</Text>
         <Text style={styles.productMore}>View details  ›</Text>
       </View>
     </Pressable>
   );
 }
 
-function ProductGrid({ items, columns, onProductPress }) {
+function ProductGrid({ items, columns, onProductPress, categories }) {
   if (items.length === 0) {
     return (
       <View style={styles.emptyState}>
@@ -179,6 +185,7 @@ function ProductGrid({ items, columns, onProductPress }) {
               key={product.id}
               product={product}
               columns={columns}
+              categories={categories}
               onPress={() => onProductPress(product)}
             />
           ))}
@@ -197,10 +204,13 @@ function HomeScreen({
   filteredProducts,
   columns,
   onProductPress,
+  categories,
+  settings,
+  catalogNotice,
 }) {
   return (
     <View>
-      <BrandHeader />
+      <BrandHeader tagline={settings.brand_tagline} />
       <View style={styles.homeIntro}>
         <Text style={styles.eyebrow}>KITCHEN · BATH · SURFACES</Text>
         <Text style={styles.heroTitle}>Make room for better living.</Text>
@@ -237,17 +247,18 @@ function HomeScreen({
         <View>
           <Text style={styles.eyebrow}>THE COLLECTION</Text>
           <Text style={styles.sectionTitle}>
-            {selectedCategory === "all" ? "Explore products" : getCategory(selectedCategory).name}
+            {selectedCategory === "all" ? "Explore products" : getCategory(selectedCategory, categories).name}
           </Text>
         </View>
         <Text style={styles.itemCount}>{filteredProducts.length} items</Text>
       </View>
-      <ProductGrid items={filteredProducts} columns={columns} onProductPress={onProductPress} />
+      {!!catalogNotice && <Text style={styles.catalogNotice}>{catalogNotice}</Text>}
+      <ProductGrid items={filteredProducts} columns={columns} onProductPress={onProductPress} categories={categories} />
     </View>
   );
 }
 
-function CategoriesScreen({ onSelectCategory }) {
+function CategoriesScreen({ onSelectCategory, categories }) {
   return (
     <View>
       <BrandHeader compact />
@@ -279,8 +290,8 @@ function CategoriesScreen({ onSelectCategory }) {
   );
 }
 
-function ProductDetails({ product, onBack }) {
-  const category = getCategory(product.categoryId);
+function ProductDetails({ product, onBack, categories, settings }) {
+  const category = getCategory(product.categoryId, categories);
   const orderMessage = "Hi TYLO HOME, I am interested in " + product.name +
     ". Please share the price, availability, and customization details.";
 
@@ -291,13 +302,15 @@ function ProductDetails({ product, onBack }) {
         <Text style={styles.backButtonText}>‹  Back to products</Text>
       </Pressable>
       <View style={[styles.productArt, styles.detailArt]}>
-        <Text style={styles.productTag}>{product.label}</Text>
-        <Text style={styles.detailIcon}>{product.icon}</Text>
+        {!!product.label && <Text style={styles.productTag}>{product.label}</Text>}
+        {product.imageUrl
+          ? <Image source={{ uri: product.imageUrl }} style={styles.productPhoto} resizeMode="cover" accessibilityLabel={product.name} />
+          : <Text style={styles.detailIcon}>{product.icon}</Text>}
       </View>
       <Text style={styles.productCategory}>{category.name.toUpperCase()}</Text>
       <Text style={styles.detailTitle}>{product.name}</Text>
       <Text style={styles.detailDescription}>{product.description}</Text>
-      <Text style={styles.detailPrice}>Price: enquire with our team</Text>
+      <Text style={styles.detailPrice}>{product.priceText || "Price: enquire with our team"}</Text>
       <View style={styles.detailList}>
         {product.details.map((detail) => (
           <View key={detail} style={styles.detailBulletRow}>
@@ -310,13 +323,13 @@ function ProductDetails({ product, onBack }) {
       <View style={styles.detailActions}>
         <ActionButton title="Find on Amazon  ↗" onPress={() => openExternal(marketplaceUrl(product, "amazon"), "Amazon")} />
         <ActionButton title="Find on Flipkart  ↗" onPress={() => openExternal(marketplaceUrl(product, "flipkart"), "Flipkart")} />
-        <ActionButton title="Custom order on WhatsApp" primary onPress={() => openWhatsApp(orderMessage)} />
+        <ActionButton title="Custom order on WhatsApp" primary onPress={() => openWhatsApp(orderMessage, settings.whatsapp_business_number)} />
       </View>
     </View>
   );
 }
 
-function HelpScreen() {
+function HelpScreen({ settings }) {
   const generalMessage = "Hi TYLO HOME, I have a question about your kitchen and home products.";
 
   return (
@@ -333,22 +346,15 @@ function HelpScreen() {
         <Text style={styles.bodyCopy}>
           Message us with a product name, measurements, or a photo of your space.
         </Text>
-        <ActionButton title="Chat with TYLO HOME" primary onPress={() => openWhatsApp(generalMessage)} />
+        <ActionButton title="Chat with TYLO HOME" primary onPress={() => openWhatsApp(generalMessage, settings.whatsapp_business_number)} />
       </View>
       <Text style={[styles.eyebrow, styles.faqEyebrow]}>QUICK ANSWERS</Text>
       <View style={styles.faqList}>
-        <FaqItem
-          question="How do custom orders work?"
-          answer="Send us the product name, measurements, finish, and reference photos. We’ll confirm what can be made and share the quote."
-        />
-        <FaqItem
-          question="How do I buy a listed product?"
-          answer="Open a product and choose Amazon or Flipkart to search the marketplace, or message us for a custom enquiry."
-        />
-        <FaqItem
-          question="Can I request a different size or finish?"
-          answer="Yes, ask us about the product and share the size and finish you need. We’ll confirm available options."
-        />
+        {(settings.faqs?.length ? settings.faqs : [
+          { question: "How do custom orders work?", answer: "Send us the product name, measurements, finish, and reference photos. We’ll confirm what can be made and share the quote." },
+          { question: "How do I buy a listed product?", answer: "Open a product and choose Amazon or Flipkart to search the marketplace, or message us for a custom enquiry." },
+          { question: "Can I request a different size or finish?", answer: "Yes, ask us about the product and share the size and finish you need. We’ll confirm available options." },
+        ]).map((faq) => <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />)}
       </View>
     </View>
   );
@@ -403,18 +409,40 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [search, setSearch] = useState("");
+  const [catalogCategories, setCatalogCategories] = useState(initialCategories);
+  const [catalogProducts, setCatalogProducts] = useState(initialProducts);
+  const [settings, setSettings] = useState({});
+  const [catalogNotice, setCatalogNotice] = useState("");
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return undefined;
+    let active = true;
+    fetchPublicCatalog()
+      .then((catalog) => {
+        if (!active) return;
+        setCatalogCategories(catalog.categories.length ? catalog.categories : initialCategories);
+        setCatalogProducts(catalog.products);
+        setSettings(catalog.settings);
+        setCatalogNotice("");
+      })
+      .catch((error) => {
+        console.warn("Could not refresh the TYLO HOME catalog", error);
+        if (active) setCatalogNotice("Showing the saved catalog. Online updates could not be loaded.");
+      });
+    return () => { active = false; };
+  }, []);
 
   const filteredProducts = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return products.filter((product) => {
-      const category = getCategory(product.categoryId);
+    return catalogProducts.filter((product) => {
+      const category = getCategory(product.categoryId, catalogCategories);
       const matchesCategory = selectedCategory === "all" || product.categoryId === selectedCategory;
       const matchesSearch =
         query.length === 0 ||
         (product.name + " " + product.description + " " + category.name).toLowerCase().includes(query);
       return matchesCategory && matchesSearch;
     });
-  }, [search, selectedCategory]);
+  }, [catalogProducts, catalogCategories, search, selectedCategory]);
 
   function selectCategory(categoryId) {
     setSelectedCategory(categoryId);
@@ -439,11 +467,11 @@ export default function App() {
           showsVerticalScrollIndicator={false}
         >
           {selectedProduct ? (
-            <ProductDetails product={selectedProduct} onBack={() => setSelectedProduct(null)} />
+            <ProductDetails product={selectedProduct} categories={catalogCategories} settings={settings} onBack={() => setSelectedProduct(null)} />
           ) : activeTab === "Categories" ? (
-            <CategoriesScreen onSelectCategory={selectCategory} />
+            <CategoriesScreen categories={catalogCategories} onSelectCategory={selectCategory} />
           ) : activeTab === "Help" ? (
-            <HelpScreen />
+            <HelpScreen settings={settings} />
           ) : (
             <HomeScreen
               search={search}
@@ -453,6 +481,9 @@ export default function App() {
               filteredProducts={filteredProducts}
               columns={columns}
               onProductPress={setSelectedProduct}
+              categories={catalogCategories}
+              settings={settings}
+              catalogNotice={catalogNotice}
             />
           )}
           <View style={styles.bottomSpace} />
@@ -525,6 +556,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
   },
+  productPhoto: { width: "100%", height: "100%" },
+  catalogNotice: { color: COLORS.goldLight, fontSize: 12, marginBottom: 10 },
   productTag: {
     position: "absolute",
     top: 10,

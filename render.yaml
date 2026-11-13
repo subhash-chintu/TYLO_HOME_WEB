@@ -2,5 +2,12 @@ services:
   - type: web
     name: tylo-home
     runtime: static
-    buildCommand: mkdir -p dist && cp index.html Logo.jpeg dist/
+    buildCommand: npm ci && npm run build
     staticPublishPath: dist
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.1
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_PUBLISHABLE_KEY
+        sync: false
