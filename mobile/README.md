@@ -31,3 +31,13 @@ npx eas-cli@latest build --platform android --profile preview
 ```
 
 The app package ID is currently `com.tylohome.catalog`. Choose the final package ID before publishing to Google Play.
+
+## Build and test on iPhone and iPad
+
+The iOS app uses bundle ID `com.tylohome.catalog` and supports iPad layouts. A TestFlight build requires an active Apple Developer Program membership and an App Store Connect app record. Start a signed App Store distribution build with:
+
+```sh
+npx eas-cli@latest build --platform ios --profile production
+```
+
+After the build finishes, upload it with `npx eas-cli@latest submit --platform ios`, then use App Store Connect → Apps → TYLO HOME → TestFlight to enable internal testing and invite testers. Testers install Apple's TestFlight app on each iPhone or iPad and accept the invitation. External testers require Apple's TestFlight beta review before they can install the build.
