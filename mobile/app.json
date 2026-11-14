@@ -5,12 +5,17 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
+    "android": {
+      "package": "com.tylohome.catalog",
+      "icon": "./assets/logo.jpeg",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.jpeg",
+        "backgroundColor": "#090909"
+      }
+    },
     "plugins": [
       "expo-status-bar"
     ],
-    "android": {
-      "package": "com.tylohome.catalog"
-    },
     "ios": {
       "bundleIdentifier": "com.tylohome.catalog",
       "supportsTablet": true,

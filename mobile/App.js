@@ -4,7 +4,6 @@ import {
   Image,
   Linking,
   Pressable,
-  SafeAreaView,
   ScrollView,
 
   StyleSheet,
@@ -14,6 +13,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { categories as initialCategories, products as initialProducts } from "./src/data/products";
 import { WHATSAPP_BUSINESS_NUMBER } from "./src/config";
 import { fetchPublicCatalog } from "./src/lib/catalog";
@@ -457,47 +457,48 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-
-      <ExpoStatusBar style="light" />
-      <View style={styles.app}>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.screenContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {selectedProduct ? (
-            <ProductDetails product={selectedProduct} categories={catalogCategories} settings={settings} onBack={() => setSelectedProduct(null)} />
-          ) : activeTab === "Categories" ? (
-            <CategoriesScreen categories={catalogCategories} onSelectCategory={selectCategory} />
-          ) : activeTab === "Help" ? (
-            <HelpScreen settings={settings} />
-          ) : (
-            <HomeScreen
-              search={search}
-              setSearch={setSearch}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-              filteredProducts={filteredProducts}
-              columns={columns}
-              onProductPress={setSelectedProduct}
-              categories={catalogCategories}
-              settings={settings}
-              catalogNotice={catalogNotice}
-            />
-          )}
-          <View style={styles.bottomSpace} />
-        </ScrollView>
-        {!selectedProduct && <BottomTabs activeTab={activeTab} onTabChange={changeTab} />}
-      </View>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView edges={["top", "right", "bottom", "left"]} style={styles.safeArea}>
+        <ExpoStatusBar style="light" />
+        <View style={styles.app}>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={styles.screenContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {selectedProduct ? (
+              <ProductDetails product={selectedProduct} categories={catalogCategories} settings={settings} onBack={() => setSelectedProduct(null)} />
+            ) : activeTab === "Categories" ? (
+              <CategoriesScreen categories={catalogCategories} onSelectCategory={selectCategory} />
+            ) : activeTab === "Help" ? (
+              <HelpScreen settings={settings} />
+            ) : (
+              <HomeScreen
+                search={search}
+                setSearch={setSearch}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                filteredProducts={filteredProducts}
+                columns={columns}
+                onProductPress={setSelectedProduct}
+                categories={catalogCategories}
+                settings={settings}
+                catalogNotice={catalogNotice}
+              />
+            )}
+            <View style={styles.bottomSpace} />
+          </ScrollView>
+          {!selectedProduct && <BottomTabs activeTab={activeTab} onTabChange={changeTab} />}
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: COLORS.background },
   app: { flex: 1, backgroundColor: COLORS.background },
-  screenContent: { paddingHorizontal: 20, paddingTop: 16 },
+  screenContent: { paddingHorizontal: 20, paddingTop: 22 },
   brandHeader: {
     flexDirection: "row",
     alignItems: "center",
